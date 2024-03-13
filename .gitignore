@@ -160,7 +160,8 @@ cython_debug/
 #.idea/
 
 .DS_Store
-.tsv*
-.png
-.avif
-.pdf
+*.csv
+*.tsv*
+*.png
+*.avif
+*.pdf
