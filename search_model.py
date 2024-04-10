@@ -1,11 +1,12 @@
 import random
 import pickle
+import numpy as np
 
 class SearchModel():
     def __init__(self,
-                 keyword_dict_file = 'keywords_dict.pkl',
-                 keyword_id_dict_file = 'keywords_id_dict.pkl',
-                 image_lookup_file = 'image_lookup.pkl'):
+                 keyword_dict_file = 'data/keywords_dict.pkl',
+                 keyword_id_dict_file = 'data/keywords_id_dict.pkl',
+                 image_lookup_file = 'data/image_lookup.pkl'):
 
         with open(keyword_dict_file, 'rb') as file:
             self.keyword_dict = pickle.load(file)
@@ -15,13 +16,11 @@ class SearchModel():
             self.all_images = pickle.load(file)
 
     def search(self, user, keyword, k=10):
-        if keyword in self.keyword_dict:
-            output = [image for image, _ in self.keyword_dict[keyword][:k]]
-            if len(output) < k:
-                output += random.sample(self.all_images, k-len(output))
-            return output
-        else:
-            return random.sample(self.all_images, k)
+        output = [image for image, _ in self.keyword_dict[keyword][:k]]
+        if len(output) < k:
+            output += np.random.choice(self.all_images, k-len(output), replace=False).tolist()
+        return output
+        
 
     def predict(self, user, keywords, images):
         if isinstance(keywords, list):
